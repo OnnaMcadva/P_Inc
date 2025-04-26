@@ -1,5 +1,5 @@
 services:
-  mariadb:
+  db:
     build:
       context: ./requirements/mariadb
     environment:
@@ -14,7 +14,7 @@ services:
     networks:
       - thenet
 
-  wordpress:
+  wp:
     build:
       context: ./requirements/wordpress
     environment:
@@ -31,7 +31,7 @@ services:
       WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
       WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
     depends_on:
-      - mariadb
+      - db
     volumes:
       - ./wp-content:/var/www/html/wp-content
       - wordpress:/var/www/html
@@ -53,7 +53,7 @@ services:
     ports:
       - '443:443'
     depends_on:
-      - wordpress
+      - wp
     restart: unless-stopped
     networks:
       - thenet
