@@ -14,11 +14,11 @@ RED = \033[0;31m
 all: $(ENV_FILE) $(SSL_FILES) run
 
 $(ENV_FILE):
-	@cp ~/.for_inception/.env ./srcs
+	@cp ~/.inception/.env ./srcs
 
 $(SSL_FILES):
 	@mkdir -p secrets
-	@cp -r ~/.for_inception/ssl ./secrets
+	@cp -r ~/.inception/ssl ./secrets
 
 build:
 	@echo -e "$(YELLOW)Building containers...$(RESET)"
@@ -90,11 +90,11 @@ fclean: clean
 
 
 # $(ENV_FILE):
-# 	@cp ~/.for_inception/.env ./srcs
+# 	@cp ~/.inception/.env ./srcs
 
 # $(SSL_FILES):
 # 	@mkdir -p secrets
-# 	@cp -r ~/.for_inception/ssl ./secrets
+# 	@cp -r ~/.inception/ssl ./secrets
 
 # build:
 # 	@docker-compose -f $(COMPOSE_FILE) build

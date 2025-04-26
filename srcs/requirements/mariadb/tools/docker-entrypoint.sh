@@ -2,10 +2,18 @@
 DATADIR='/var/lib/mysql'
 SOCKET=/var/lib/mysql/mysql.sock
 
+# Логика скрипта:
+# - Если директория $DATADIR/mysql не существует:
+#       Инициализирует данные MariaDB (mysql_install_db).
+#       Запускает MariaDB в фоновом режиме (mysqld_safe).
+#       Ждёт, пока сервер запустится (mysqladmin ping).
+#       Выполняет setup_db для настройки базы и пользователей.
+# - Если директория существует:
+#       Запускает MariaDB без повторной инициализации (mysqld_safe).
+
 setup_db() {
-    # let's create the wordpress user/db and perform more or less the same setup as the interactive
-    #  mysql_secure_installation script does not to shoot ourselves in the foot
-    echo "Creating database ${MYSQL_DATABASE} with user ${MYSQL_USER} and passwords"
+
+    echo "Creating database ${MYSQL_DATABASE} with user 🥸 ${MYSQL_USER} and passwords"
 
 	mariadb --protocol=socket -uroot -hlocalhost --socket="${SOCKET}" --binary-mode --database=mysql <<-EOSQL
 		SET @orig_sql_log_bin= @@SESSION.SQL_LOG_BIN;
@@ -30,30 +38,23 @@ setup_db() {
     echo "Database and user created"
 }
 
-
 if [ ! -d "$DATADIR/mysql" ]; then
 
     echo "Initializing MariaDB data directory.."
     mysql_install_db --user=mysql --datadir="$DATADIR"
-
-    # Now let's start mariadb in background first, perform initialization / db setup for wordpress, and then move
-    # it to foreground when everything is done
     
-    # Start mariadb in background
+    # Запуск MariaDB в фоновом режиме
     echo "Starting mariadb in background.."
     mysqld_safe --datadir=/var/lib/mysql &
 
-    # Wait for mariadb to accept connections
     until mysqladmin ping --silent; do
         echo "Waiting for mariadb to start.."
         sleep 5     
     done
     
-    # Initialize
     echo "Installing MariaDB..."
     setup_db
 
-    # Bring to foreground
     wait
 else
     echo "Starting MariaDB without user init that has been done before"

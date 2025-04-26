@@ -1,3 +1,8 @@
+# Скрипт настраивает WordPress в контейнере: 
+# ждёт базу данных, скачивает и 
+# устанавливает WordPress, создаёт `wp-config.php`, 
+# добавляет пользователей, задаёт права и запускает PHP-FPM.
+
 DATADIR='/var/www/html'
 DBHOST='db:3306'
 
@@ -13,9 +18,6 @@ install_wordpress() {
 
         wp core download --path=$DATADIR
 
-        # FFS https://github.com/wp-cli/config-command/issues/141 
-        # Long story short - there is an unresolved issue that prevents proper wp config creation via wp
-        # (need to call wp-cli.phar)
         echo "Generating wp config..."
         wp-cli.phar --path=$DATADIR config create --dbname="$WORDPRESS_DB_NAME" --dbuser="$WORDPRESS_DB_USER" --dbpass="$WORDPRESS_DB_PASSWORD" --dbhost="$DBHOST" --dbprefix="$WORDPRESS_TABLE_PREFIX"
         echo "Running core install / creating users..."
@@ -25,7 +27,7 @@ install_wordpress() {
     else
         echo "Wordpress is already installed, nothing to do"
     fi
-
+    # 755 ???
     chmod -R 777 $DATADIR
     echo "Starting PHP-FPM..."
     exec "$@"
