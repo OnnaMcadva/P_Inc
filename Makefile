@@ -79,43 +79,41 @@ fclean: clean
 
 .SILENT: fclean
 
-# ENV_FILE := ./srcs/.env
-# SSL_FOLDER := ./secrets/ssl
-# SSL_FILES = $(SSL_FOLDER)/chain.pem \
-# 			$(SSL_FOLDER)/fullchain.pem \
-# 			$(SSL_FOLDER)/privkey.pem
-# COMPOSE_FILE := ./srcs/docker-compose.yml
+#	fclean: clean
+# 	@echo -e "$(YELLOW)Removing containers...$(RESET)"
+# 	@for container in $(shell docker ps -aq); do \
+# 		if docker rm -fv $$container > /dev/null 2>&1; then \
+# 			echo -e "$(GREEN)Container $$container removed successfully!$(RESET)"; \
+# 		else \
+# 			echo -e "$(RED)🍄 $$container$(RESET)"; \
+# 		fi \
+# 	done
 
-# all: $(ENV_FILE) $(SSL_FILES) run
+# 	@echo -e "$(YELLOW)Removing images...$(RESET)"
+# 	@for image in $(shell docker image ls -q); do \
+# 		if docker rmi $$image > /dev/null 2>&1; then \
+# 			echo -e "$(GREEN)Image $$image removed successfully!$(RESET)"; \
+# 		else \
+# 			echo -e "$(RED)🍄 $$image$(RESET)"; \
+# 		fi \
+# 	done
 
+# 	@echo -e "$(YELLOW)Removing volumes...$(RESET)"
+# 	@for volume in $(shell docker volume ls -q); do \
+# 		if docker volume rm $$volume > /dev/null 2>&1; then \
+# 			echo -e "$(GREEN)Volume $$volume removed successfully!$(RESET)"; \
+# 		else \
+# 			echo -e "$(RED)🍄 $$volume$(RESET)"; \
+# 		fi \
+# 	done
 
-# $(ENV_FILE):
-# 	@cp ~/.inception/.env ./srcs
+# 	@echo -e "$(YELLOW)Removing networks...$(RESET)"
+# 	@for network in $(shell docker network ls -q); do \
+# 		if docker network rm $$network > /dev/null 2>&1; then \
+# 			echo -e "$(GREEN)Network $$network removed successfully!$(RESET)"; \
+# 		else \
+# 			echo -e "$(RED)🍄 $$network$(RESET)"; \
+# 		fi \
+# 	done
 
-# $(SSL_FILES):
-# 	@mkdir -p secrets
-# 	@cp -r ~/.inception/ssl ./secrets
-
-# build:
-# 	@docker-compose -f $(COMPOSE_FILE) build
-
-# run:
-# 	@docker-compose -f $(COMPOSE_FILE) up -d
-
-# stop:
-# 	@docker-compose -f $(COMPOSE_FILE) down
-
-# clean: stop
-# 	@docker system prune -f
-
-# fclean: clean
-# 	-@docker rm -fv $(shell docker ps -aq)
-# 	-@docker rmi $(shell docker image ls -q)
-# 	-@docker volume rm $(shell docker volume ls -q)
-# 	-@docker network rm $(shell docker network ls -q)
-# 	-@rm -rf secrets ./srcs/wp-content ./srcs/.env
-
-
-# .PHONY: all build run stop clean fclean
-
-# .SILENT: fclean
+# 	@rm -rf secrets ./srcs/wp-content ./srcs/.env $(LOG_FILE)
