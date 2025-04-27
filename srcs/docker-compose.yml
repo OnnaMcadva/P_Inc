@@ -65,3 +65,28 @@ volumes:
 networks:
   thenet:
     driver: bridge
+
+
+# volumes:
+#   mysql-datavolume:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: /home/anmakaro/data/mysql
+#   wordpress:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: /home/anmakaro/data/wordpress
+
+# networks:
+#   thenet:
+#     driver: bridge
+
+
+# # mkdir -p /home/anmakaro/data/mysql
+# # mkdir -p /home/anmakaro/data/wordpress
+# # chmod -R 777 /home/anmakaro/data
+# # sudo chown anmakaro:anmakaro -R /home/anmakaro/data
